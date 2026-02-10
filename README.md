@@ -2,71 +2,68 @@
 
 Automated provisioning and management for Jenkins CI infrastructure.
 
-## What This Does
+This project spins up multiple Jenkins instances using Terraform and provides Python tooling to monitor and manage them. Built to demonstrate platform automation patterns for CI/CD infrastructure.
 
-Spins up multiple Jenkins instances using Terraform and provides Python tooling to monitor and manage them. Built to demonstrate platform automation patterns for CI/CD infrastructure.
+Fleet management tool showing all instances:
+![Fleet Status](fleet-status.png)
 
-## Quick Start
+Jenkins instances accessible via browser:
+![Jenkins UI](jenkins-ui.png)
 
-**Prerequisites:**
-- Docker Desktop running
-- Terraform installed
-- Python 3.x with `docker` package
+Running containers in Docker:
+![Docker Containers](docker-containers.png)
 
-**Deploy:**
+**Setup**
+
+Requirements:
+- Docker Desktop
+- Terraform
+- Python with docker package (pip install docker)
+
+Deploy:
 ```bash
 terraform init
 terraform apply
 ```
 
-**Manage:**
+Monitor the fleet:
 ```bash
 python manage_fleet.py
 ```
 
-Access Jenkins instances at:
-- http://localhost:8081
-- http://localhost:8082  
-- http://localhost:8083
+Jenkins instances run on ports 8081-8083.
 
-**Cleanup:**
+Tear down:
 ```bash
 terraform destroy
 ```
 
-## What's Included
+**What's included**
 
-**Infrastructure (Terraform):**
-- `main.tf` - Provisions 3 Jenkins containers on a shared Docker network
-- `variables.tf` - Configuration options (instance count, ports, image)
-- `outputs.tf` - Returns URLs and instance info after deployment
+Infrastructure (Terraform):
+- main.tf - Provisions 3 Jenkins containers on a shared Docker network
+- variables.tf - Configuration options
+- outputs.tf - Returns URLs and instance info
 
-**Automation (Python):**
-- `manage_fleet.py` - Fleet monitoring tool with health checks and metrics
+Automation (Python):
+- manage_fleet.py - Fleet monitoring with health checks and metrics
 
-## Why This Approach
+**Why this approach**
 
-**Consistency:** All instances provisioned from the same Terraform config  
-**Reproducibility:** Destroy and recreate identical environments anytime  
-**Observability:** Python tooling gives real-time fleet status and metrics  
-**Scalability:** Change instance count in variables.tf, reapply
+Consistency - all instances provisioned from the same config  
+Reproducibility - destroy and recreate identical environments  
+Observability - real-time fleet status and metrics  
+Scalability - change instance count in variables, reapply
 
-## Scaling to Production
+**Scaling to production**
 
-This uses Docker locally, but the same patterns apply to cloud:
+This uses Docker locally, but the same patterns apply to cloud. Swap Docker provider for AWS/Azure, replace containers with EC2/VMs, add load balancer, hook Python scripts to CloudWatch/Prometheus. The IaC structure and automation patterns stay the same.
 
-- Swap Docker provider for AWS/Azure in Terraform
-- Replace containers with EC2/VMs
-- Add load balancer in front of instances
-- Hook Python scripts to CloudWatch/Prometheus instead of Docker API
+**Notes**
 
-The IaC structure and automation patterns remain the same.
-
-## Notes
-
-Initial Jenkins setup requires unlocking each instance with the admin password from logs:
+Initial Jenkins setup requires the admin password from logs:
 ```bash
 docker logs jenkins-master-1
 ```
 
-Built for the Autodesk Platform Automation role application - demonstrates CI platform thinking and automation tooling.
+Built for the Autodesk Platform Automation role application.
